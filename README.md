@@ -1,228 +1,77 @@
-
-# **DESIGN OF OPTIMAL PID CONTROLLER FOR SPEED CONTROL OF BLDC MOTOR — AMESim Based Simulation**
-
----
-
-## **1. INTRODUCTION**
-
-Brushless DC (BLDC) motors are widely used in modern applications such as electric vehicles, drones, medical equipment, HVAC systems, industrial drives, and robotics due to their high efficiency, smooth torque production, and excellent dynamic performance. Achieving precise speed control is crucial in these applications to ensure smooth operation, stability, and rapid response.
-
-The **PID controller** (Proportional–Integral–Derivative) is the most widely used closed-loop controller in industrial systems due to its simplicity, robustness, and effectiveness. PID controllers offer good performance for a wide range of systems and can be tuned to provide the desired speed response for BLDC motors.
-
-This project focuses on designing, tuning, and evaluating a **PID-based speed control system for a BLDC motor** using **Siemens LMS Imagine.Lab AMESim**. The simulation environment allows accurate modeling of the motor, inverter, sensors, and load conditions to analyze how the PID controller performs in different scenarios.
+**Design of Optimal PID Controller for the Speed Control of BLDC Motor Using Artificial Neural Network**
 
 ---
 
-## **2. MOTIVATION**
+## **ABSTRACT**
 
-BLDC motors exhibit nonlinear characteristics such as:
-
-* Back-EMF waveform variations
-* Commutation switching effects
-* Load disturbances
-* Parameter changes during operation
-
-Despite these nonlinearities, industrial systems frequently rely on PID controllers because:
-
-* They are simple to design and implement
-* They provide stable and predictable performance
-* They do not require detailed modeling of nonlinear behaviors
-* They can be tuned for desired transient and steady-state performance
-
-The objective of this project is to demonstrate that a carefully tuned PID controller can still provide reliable and efficient speed control for a BLDC motor in various operating conditions.
+The primary objective of this project is to develop an intelligent speed control strategy for a Brushless DC (BLDC) motor using a hybrid control framework comprising a classical PID controller and an Artificial Neural Network (ANN)–based controller. The work involves creating an accurate mathematical model of the BLDC motor, designing a conventional PID controller, and generating system response data for supervised neural network training. MATLAB Simulink is used to model the BLDC motor and execute simulations for data collection, controller design, and reference model generation. The ANN controller is trained to emulate and improve upon the ideal control characteristics produced by the well-tuned PID controller. After training, the ANN replaces the PID in a simulated BLDC motor drive system and is evaluated under various dynamic conditions. Comparative results demonstrate that the ANN-based controller significantly reduces overshoot, improves transient behavior, and achieves faster settling times. Experimental findings reveal that ANN-based control responses closely follow the ideal reference model, outperforming classical PID control in accuracy and robustness.
 
 ---
 
-## **3. OBJECTIVE OF THE PROJECT**
+## **MOTIVATION AND OBJECTIVE**
 
-The main objectives of this BLDC motor control project are:
+The field of electric motor control has undergone rapid advancements due to the increasing demand for precision, efficiency, and adaptability in modern electromechanical systems. BLDC motors, in particular, are widely used in electric vehicles, drones, automation systems, consumer appliances, and aerospace due to their high torque density, reliability, and efficiency. However, BLDC motors exhibit nonlinear behavior resulting from trapezoidal back-EMF, rotor position–dependent torque generation, inverter switching, and parameter variations due to temperature and load disturbances. This makes traditional linear controllers like PID insufficient across the entire operating range.
 
-1. Develop the mathematical model of a BLDC motor and PID controller.
-2. Build a complete motor drive model in **AMESim** including inverter, control loops, sensors, and load.
-3. Tune the PID controller to achieve optimal speed regulation.
-4. Analyze BLDC motor speed response under:
+Artificial Neural Networks (ANNs) offer a promising solution for such nonlinear systems. Inspired by biological neurons, ANNs can learn patterns, approximate complex nonlinear functions, and adapt to varying system conditions. Their ability to learn input–output mappings directly from data makes them highly suitable for controlling systems where precise mathematical modeling is difficult or where dynamic behavior changes over time.
 
-   * Step speed commands
-   * Sudden load disturbances
-   * Parameter variations
-5. Evaluate controller performance in terms of:
+The core objective of this project is to integrate the simplicity of PID control with the learning capability of ANNs to create a superior speed control system for BLDC motors. The project aims to:
 
-   * Rise time
-   * Peak overshoot
-   * Settling time
-   * Steady-state error
-6. Draw conclusions based on simulation results for real-world applicability.
+* Develop an accurate BLDC motor model.
+* Design and tune a conventional PID controller.
+* Collect system behavior data under various dynamic inputs.
+* Train an ANN to replicate and enhance the PID controller performance.
+* Implement the trained ANN within the BLDC motor drive simulation.
+* Compare the performance of ANN and PID controllers using standard control metrics.
+
+This hybrid approach provides a deeper understanding of intelligent control strategies and showcases how machine learning can be integrated with classical control theory.
 
 ---
 
-## **4. MATHEMATICAL MODEL**
+## **OUTLINE OF THE PROJECT**
 
-### **4.1 Electrical Model of BLDC Motor**
+This project is structured into several major phases:
 
-The BLDC motor operates using three-phase stator windings energized in sequence by an electronic commutation circuit.
+1. **Mathematical Modeling:**
+   A complete mathematical model of the BLDC motor and the PID controller is derived. Electrical, mechanical, and electromagnetic equations are formulated to simulate motor behavior under various conditions.
 
-For each phase:
+2. **PID Controller Design:**
+   A conventional PID controller is implemented in MATLAB Simulink. The controller is tuned using established techniques to generate high-quality reference control behavior.
 
-[
-V = Ri + L\frac{di}{dt} + e_{\text{back-EMF}}
-]
+3. **ANN Controller Development:**
+   A feedforward ANN is designed for supervised learning. The architecture includes two hidden layers with nonlinear activation functions to capture system nonlinearities.
 
-Where:
+4. **Training and Validation:**
+   The ANN is trained on 80% of the collected data using backpropagation. The remaining 20% is used for validation. Training is repeated until acceptable error levels are achieved.
 
-* (V) → Phase voltage
-* (R) → Resistance
-* (L) → Inductance
-* (e) → Back-EMF
+5. **ANN Integration:**
+   Once validated, the ANN replaces the PID controller within the BLDC motor simulation. Testing is performed under step changes, disturbances, and parameter variations.
 
-### **4.2 Mechanical Model**
+6. **Performance Evaluation:**
+   The responses of PID and ANN controllers are compared in terms of rise time, settling time, overshoot, steady-state error, and robustness.
 
-[
-T_{motor} - T_{load} = J\frac{d\omega}{dt} + B\omega
-]
-
-Where:
-
-* (T_{motor}) → Motor torque
-* (T_{load}) → Load torque
-* (J) → Moment of inertia
-* (B) → Friction coefficient
-* (\omega) → Angular speed
+7. **Conclusion:**
+   The study concludes that ANN-based control offers superior adaptability, faster transients, and better tracking performance compared to classical PID.
 
 ---
 
-## **5. PID CONTROLLER DESIGN**
+## **PURPOSE, SCOPE, AND APPLICABILITY**
 
-The PID controller generates a control signal based on the speed error:
+### **PURPOSE**
 
-[
-e(t) = \omega_{\text{ref}} - \omega_{\text{actual}}
-]
+The purpose of this project is to explore the capability of Artificial Neural Networks to enhance motor speed control by overcoming the limitations of classical PID controllers. Since ANN-based control does not require explicit motor parameter identification, it provides a scalable and adaptive framework suitable for systems undergoing parameter variations such as temperature-induced resistance changes or load fluctuations. The ANN’s ability to learn the control law directly from system data makes it particularly effective for complex electromechanical systems. The PID controller serves as a foundation for generating reference behavior and for guiding the ANN during training.
 
-Control output:
+### **SCOPE**
 
-[
-u(t) = K_p e(t) + K_i \int e(t) dt + K_d \frac{de(t)}{dt}
-]
+Although the ANN controller demonstrates improved performance, certain limitations still exist. The current study uses a feedforward ANN with fixed architecture, chosen through manual tuning. Future work may include optimizing the number of neurons, adding recurrent layers, or using reinforcement learning for real-time adaptation. Additionally, the ANN’s ability to generalize beyond the training dataset is constrained. Research can be expanded to incorporate online learning methods or adaptive neural controllers that update their weights during operation. The architecture can be extended for multi-input multi-output (MIMO) systems or integrated with fuzzy logic to form ANFIS controllers.
 
-### **Roles of PID Parameters**
+### **APPLICABILITY**
 
-* **Proportional (P):** Reduces rise time, increases responsiveness
-* **Integral (I):** Eliminates steady-state error
-* **Derivative (D):** Reduces overshoot and improves stability
-
-### **PID Tuning Approach**
-
-* Ziegler–Nichols method
-* Trial-and-error tuning
-* Response-based manual tuning
-* AMESim response curve analysis
-
-The controller is tuned in AMESim for optimal behavior.
+The applicability of ANN-based control continues to grow as industries move toward data-driven intelligent automation. BLDC motor control is crucial in electric vehicles, robotics, unmanned aerial systems, smart appliances, and industrial automation. Replacing or enhancing PID controllers with ANNs can lead to improved efficiency, reduced energy consumption, and smoother operation. Efficient ANN-based controller designs can also provide competitive advantages in commercial motor drives and contribute to the development of next-generation intelligent motor control systems.
 
 ---
 
-## **6. AMESim SIMULATION MODEL**
+## **ACKNOWLEDGEMENT**
 
-The BLDC drive system in AMESim includes:
-
-* BLDC motor block
-* Electronic commutation and inverter
-* DC supply
-* Speed measurement block
-* PID controller block
-* Load torque module
-* Reference speed generator
-
-### **Simulation Scenarios**
-
-1. **Step change in speed**
-2. **Load torque disturbance**
-3. **Sudden change in motor parameters**
-4. **Start–stop sequences**
-
-These tests help evaluate controller robustness.
-
----
-
-## **7. RESULTS AND ANALYSIS**
-
-### **7.1 Speed Response**
-
-A well-tuned PID controller provides:
-
-* Fast rise time
-* Low or moderate overshoot
-* Good settling characteristics
-* Small steady-state error
-
-### **7.2 Disturbance Response**
-
-When load torque is applied:
-
-* Proportional and integral actions restore the speed to reference
-* Motor exhibits stable behavior
-* Settling time increases slightly but remains acceptable
-
-### **7.3 Parameter Variation Test**
-
-The PID controller remains stable even if:
-
-* Motor resistance changes
-* Load inertia changes
-* Supply voltage fluctuates
-
-However, performance may slightly degrade due to fixed gains.
-
----
-
-## **8. PERFORMANCE EVALUATION**
-
-| Performance Metric     | Observation                            |
-| ---------------------- | -------------------------------------- |
-| **Rise Time**          | Fast and consistent                    |
-| **Overshoot**          | Low to moderate (depends on tuning)    |
-| **Settling Time**      | Good stability after transients        |
-| **Steady-State Error** | Very small or zero                     |
-| **Response to Load**   | Quick compensation and recovery        |
-| **Robustness**         | Good for moderate parameter variations |
-
-PID proves efficient for BLDC motor control in most practical applications.
-
----
-
-## **9. PURPOSE, SCOPE, AND APPLICABILITY**
-
-### **Purpose**
-
-To achieve stable and accurate speed control of a BLDC motor using a conventional PID controller modelled in AMESim.
-
-### **Scope**
-
-* Study of BLDC motor dynamic characteristics
-* PID tuning techniques
-* Simulation-based evaluation of control performance
-* Analysis under load and parameter changes
-
-### **Applicability**
-
-PID-based BLDC control is widely used in:
-
-* Robotics and automation
-* Electric and hybrid vehicles
-* Drone propulsion systems
-* Machine tools and CNC machines
-* Household appliances
-* Medical devices
-* Industrial conveyor systems
-
-PID remains one of the most practical, low-cost, and reliable controllers in these areas.
-
----
-
-## **10. CONCLUSION**
-
-The project demonstrates the successful design and simulation of a PID-based speed control system for a BLDC motor using AMESim. The PID controller provides stable and reliable control performance with minimal steady-state error, acceptable overshoot, and good disturbance rejection.
-
-Although BLDC motors exhibit nonlinear behavior, a properly tuned PID controller performs effectively across various operating conditions, making it suitable for most industrial applications. The AMESim simulation results validate the controller’s robustness, efficiency, and practical applicability.
+I have put great effort into completing this project; however, it would not have been possible without the guidance, support, and encouragement of many individuals. I would like to express my heartfelt gratitude to my project guide for providing continuous supervision, valuable suggestions, and deep insights that strengthened the quality of this work. I am also thankful to my friends and teammates who supported me throughout the project development. Their cooperation, encouragement, and technical inputs helped me complete this work within the allotted time frame.
 
 ---
